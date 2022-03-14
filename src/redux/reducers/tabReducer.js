@@ -13,7 +13,7 @@ export const tabReducer = (state = initialState, {type, payload}) => {
     switch (type) {
         case ActionTypes.SET_TAB:
             return {
-                past: [...past, payload.tab],
+                past: [payload.tab, ...past],
                 tab: payload.tab,
                 future: future,
                 notifications: [...notifications]
@@ -25,7 +25,7 @@ export const tabReducer = (state = initialState, {type, payload}) => {
             return {
                 past: newPast,
                 tab: previous,
-                future: [tab, ...future],
+                future: [...future, tab],
                 notifications: [...notifications]
             }
             break;
