@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import OsiTextField from "../atoms/OsiTextField";
 import {removeNotification, setNotification, setTab} from "../../redux/actions/tabActions";
 import {useDispatch, useSelector} from "react-redux";
+import Box from "@mui/material/Box";
 
 const OsiForm = (props) => {
     const dispatch = useDispatch()
@@ -19,6 +20,7 @@ const OsiForm = (props) => {
                     value: props.props?.value ? props.props?.value : ''
                 })
 
+
                 if (
                     props.props.required &&
                     !props.props.value?.length
@@ -26,7 +28,7 @@ const OsiForm = (props) => {
                     dispatch(setNotification({
                         id: props.props?.id,
                         value: props.props?.value,
-                        action: props.props?.modifiedActionLabel?.replace('$$', props.props?.id)
+                        action: props.props?.label + ' est obligatoire '
                     }))
                 }
             }
@@ -55,7 +57,7 @@ const OsiForm = (props) => {
             dispatch(setNotification({
                 id: name,
                 value: value,
-                action: formObject[index]['modifiedActionLabel']?.replace('$$', name)
+                action: formObject[index]['label'] + ' est obligatoire'
             }
         ))
         } else if (
@@ -88,14 +90,19 @@ const OsiForm = (props) => {
     }
 
     return (
-        <form>
+        <Box
+            component="form"
+            sx={{
+                '& .MuiTextField-root': { m: 1, width: '25ch' },
+            }}
+        >
             {
                 formObject.map((item, index) => {
                     return (
                         <OsiTextField
                             id={item.id}
                             value={item.value}
-                            label={item.label + ' ' + item.id}
+                            label={item.label}
                             focus={index === 0}
                             required={item.required}
                             key={item.id}
@@ -105,7 +112,7 @@ const OsiForm = (props) => {
                     )
                 })
             }
-        </form>
+        </Box>
     );
 }
 

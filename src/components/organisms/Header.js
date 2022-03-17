@@ -1,17 +1,20 @@
-import OsiTextField from "../atoms/OsiTextField";
+import TextField from "@mui/material/TextField"
 import OsiDropdown from "../atoms/OsiDropdown";
-import {useDispatch, useSelector} from "react-redux";
-import {redo, undo} from "../../redux/actions/tabActions";
+import { useDispatch, useSelector } from "react-redux";
+import Stack from '@mui/material/Stack';
+import Box from "@mui/material/Box";
+import { redo, undo } from "../../redux/actions/tabActions";
 
 const Header = () => {
     const dispatch = useDispatch()
-
+    
     const tab = useSelector((state) => state.getTab.tab)
     const past = useSelector((state) => state.getTab.past)
     const future = useSelector((state) => state.getTab.future)
     const notifications = useSelector((state) => state.getTab.notifications)
 
     const undoClick = (e, index) => {
+        console.log(index)
         for (let i = 0; i <= index; i++) {
             dispatch(undo())
         }
@@ -24,17 +27,31 @@ const Header = () => {
     }
 
     return (
-        <header
-            className="w-full mx-auto max-w-7xl mx-auto flex justify-between items-center border-b-2 border-gray-100 px-4 py-4">
+        <Stack
+            direction="row"
+            justifyContent="space-between"
+            mb={5}
+        >
             <div>
-                <OsiDropdown icon="back" dataList={past} onClick={undoClick}/>
-                <OsiDropdown icon="next" dataList={future} onClick={redoClick}/>
+                <Stack
+                    direction="row"
+                    spacing={2}
+                >
+                    <OsiDropdown icon="back" dataList={past} onClick={undoClick} />
+                    <OsiDropdown icon="next" dataList={future} onClick={redoClick} />
+                </Stack>
+
             </div>
-            <div className="w-full max-w-xl">
-                <OsiTextField value={tab.path}/>
-            </div>
-            <OsiDropdown icon="notification" dataList={notifications}/>
-        </header>
+            <Box
+            component="form"
+            >
+                <TextField
+                    id="route"
+                    value={tab.path}
+                />
+            </Box>
+            <OsiDropdown icon="notification" dataList={notifications} />
+        </Stack>
     )
 }
 

@@ -1,14 +1,14 @@
 import React from "react"
-import Container from "../atoms/Container";
+import Container from "@mui/material/Container"
 import OsiTabs from "../molecules/OsiTabs";
 import OsiTab from "../atoms/OsiTab";
 import OsiForm from "../molecules/OsiForm";
 import OsiTextField from "../atoms/OsiTextField";
 import Header from "../organisms/Header";
 
-const Tabs = () => {
+const Home = () => {
     return(
-        <Container>
+        <Container maxWidth="lg">
             <Header/>
             <OsiTabs id="tabs_0" label="Root tab bar">
                 <OsiTab id="tab_1" label="Tab 1" actionLabel="Navigation vers {$this} de {tab_1} de {tabs_0}">
@@ -100,4 +100,4 @@ const Tabs = () => {
     )
 }
 
-export default Tabs
+export default Home

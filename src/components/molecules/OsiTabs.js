@@ -1,13 +1,15 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setTab } from "../../redux/actions/tabActions";
+import Tabs from '@mui/material/Tabs'
+import Tab from '@mui/material/Tab'
+import Box from '@mui/material/Box'
 import OsiTab from "../atoms/OsiTab";
-import {useDispatch, useSelector} from "react-redux";
-import {setTab} from "../../redux/actions/tabActions";
 
 const OsiTabs = (props) => {
     const dispatch = useDispatch()
-
     const tab = useSelector((state) => state.getTab.tab)
-
+    
     const [tabsData, setTabsData] = useState([])
     const [selectedTab, setSelectedTab] = useState(0)
     const [parentPath, setParentPath] = useState('')
@@ -18,7 +20,7 @@ const OsiTabs = (props) => {
         React.Children.forEach(props.children, element => {
             if (!React.isValidElement(element)) return;
             if (element.type.name === 'OsiTab') {
-                const {...props} = element;
+                const { ...props } = element;
                 newTabsData.push({
                     ...props.props,
                     parentPath: parentPath
@@ -34,13 +36,12 @@ const OsiTabs = (props) => {
     }, [props, tab.path])
 
     const handleClick = (event, newItem) => {
+        console.log(newItem)
         let newPath = newItem.parentPath + '/' + newItem.id
-        let action = newItem.action?.replace('$this', newItem.id)
+        let action = newItem.action?.replace('$this', newItem.label).replace(newItem.id, newItem.label)
         dispatch(setTab({
-            tab: {
-                action: action,
-                path: newPath
-            }
+            action: action,
+            path: newPath
         }))
         setSelectedTab(tabsData.findIndex(item => newItem.id === item.id))
     }
@@ -69,6 +70,7 @@ const OsiTabs = (props) => {
     }
 
     const setNewIndex = (newTabsData) => {
+        console.log(newTabsData)
         let id = -1
         let newIndex = -1
         if (tab.path) {
@@ -89,28 +91,34 @@ const OsiTabs = (props) => {
 
     return (
         <>
-            <div className="border-b border-gray-200">
-                <ul className="flex flex-wrap -mb-px">
-                    {
-                        tabsData.map((tab, index) => {
-                            return (
-                                <OsiTab
-                                    active={index === selectedTab}
-                                    id={tab.id}
-                                    parentPath={parentPath}
-                                    label={tab.label}
-                                    key={index}
-                                    onClick={handleClick}
-                                    action={tab.actionLabel}
-                                />
-                            )
-                        })
-                    }
-                </ul>
-            </div>
-            <div className="mt-5">
+            <Tabs
+                value={selectedTab}
+                variant="scrollable"
+                scrollButtons
+                allowScrollButtonsMobile
+                aria-label="scrollable force tabs example"
+            >
+                {
+                    tabsData.map((tab, index) => {
+                        return (
+                            <OsiTab
+                                selected={index === selectedTab}
+                                id={tab.id}
+                                parentPath={parentPath}
+                                label={tab.label}
+                                key={index}
+                                onClick={handleClick}
+                                action={tab.actionLabel}
+                            />
+                        )
+                    })
+
+                }
+            </Tabs>
+            <Box className="mt-5">
                 {tabsData[selectedTab] && tabsData[selectedTab].children}
-            </div>
+            </Box>
+
         </>
     )
 }

@@ -1,12 +1,12 @@
 import './App.css';
-import Tabs from "./components/pages/Tabs";
+import Home from "./components/pages/Home";
 import {Route, Routes} from "react-router-dom";
 
 function App() {
     return (
         <section>
             <Routes>
-                <Route path="*" element={<Tabs/>}/>
+                <Route path="/" element={<Home/>}/>
             </Routes>
         </section>
     );
